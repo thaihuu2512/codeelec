@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsBook Manager System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="output.css">
+    <script src="script.js" defer></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div class="bg-gray-800 text-white w-64 flex-shrink-0">
+            <div class="p-4">
+                <h2 class="text-xl font-bold mb-4">SportsBook</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block p-2 bg-gray-700 rounded hover:bg-gray-600 transition-colors">Member IBC</a></li>
+                    <li><a href="#" class="block p-2 hover:bg-gray-700 rounded transition-colors">Member SBO</a></li>
+                    <li><a href="#" class="block p-2 hover:bg-gray-700 rounded transition-colors">Agent SBO</a></li>
+                    <li><a href="#" class="block p-2 hover:bg-gray-700 rounded transition-colors">Agent IBC</a></li>
+                    <li><a href="#" class="block p-2 hover:bg-gray-700 rounded transition-colors">Agent P88</a></li>
+                    <li><a href="#" class="block p-2 hover:bg-gray-700 rounded transition-colors">Agent BetISN</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <div class="p-4">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-xl font-bold">@PhanMemBongDa.Com - SportsBook Manager System v1.25.1.5</h1>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search something" 
+                               class="pl-3 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <i class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-4">
+                    <!-- Tab Navigation -->
+                    <div class="flex space-x-2 mb-4 overflow-x-auto">
+                        <button class="tab-button active" onclick="switchTab('Thông Tin')">Thông Tin</button>
+                        <button class="tab-button" onclick="switchTab('Báo cáo thắng thua')">Báo cáo thắng thua</button>
+                        <button class="tab-button" onclick="switchTab('Risky Accounts')">Risky Accounts</button>
+                        <button class="tab-button" onclick="switchTab('Cancelled Betlist')">Cancelled Betlist</button>
+                        <button class="tab-button" onclick="switchTab('Outstanding')">Outstanding</button>
+                        <button class="tab-button" onclick="switchTab('Phân tích thắng thua')">Phân tích thắng thua</button>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <div class="flex items-center gap-2">
+                            <label for="from">From:</label>
+                            <input type="date" id="from" class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label for="to">To:</label>
+                            <input type="date" id="to" class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Phân Tích</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Hôm Qua</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Hôm Nay</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Tuần Trước</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Tuần Này</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Từ Tháng Trước</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">3 Tháng Trước</button>
+                    </div>
+
+                    <!-- Save Options and Filters -->
+                    <div class="flex flex-wrap gap-4 mb-4">
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Save All</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Save LastWeek</button>
+                        <button class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Save ThisWeek</button>
+                        
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="under">
+                                <span>Under</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="over">
+                                <span>Over</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="eat">
+                                <span>Eat</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="half-pk">
+                                <span>Half PK</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="half-under">
+                                <span>Half Under</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="half-over">
+                                <span>Half Over</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="half-put">
+                                <span>Half Put</span>
+                            </label>
+                            <label class="flex items-center gap-1">
+                                <input type="checkbox" class="form-checkbox" id="half-eat">
+                                <span>Half Eat</span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <label for="odd-min">Odd.Min</label>
+                            <input type="text" id="odd-min" class="w-20 px-3 py-2 border rounded-lg" value="0.40">
+                            <label for="odd-max">Odd.Max</label>
+                            <input type="text" id="odd-max" class="w-20 px-3 py-2 border rounded-lg" value="0.50">
+                        </div>
+                    </div>
+
+                    <!-- Data Tables -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- Left Table -->
+                        <div class="table-container overflow-x-auto rounded-lg bg-white">
+                            <table id="leftTable" class="min-w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="p-3 text-left border-b">TYPE</th>
+                                        <th class="p-3 text-left border-b">HDP</th>
+                                        <th class="p-3 text-left border-b">Detailed</th>
+                                        <th class="p-3 text-left border-b">Turnover</th>
+                                        <th class="p-3 text-left border-b">Win/Lose</th>
+                                        <th class="p-3 text-left border-b">Votes</th>
+                                        <th class="p-3 text-left border-b">Lose</th>
+                                        <th class="p-3 text-left border-b">Win</th>
+                                        <th class="p-3 text-left border-b">RC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 border-b">1H</td>
+                                        <td class="p-3 border-b">0.25</td>
+                                        <td class="p-3 border-b">Dưới</td>
+                                        <td class="p-3 border-b">7210</td>
+                                        <td class="p-3 border-b win-value">1,825.00</td>
+                                        <td class="p-3 border-b">23</td>
+                                        <td class="p-3 border-b">0</td>
+                                        <td class="p-3 border-b">3</td>
+                                        <td class="p-3 border-b">0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Right Table -->
+                        <div class="table-container overflow-x-auto rounded-lg bg-white">
+                            <table id="rightTable" class="min-w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="p-3 text-left border-b">Detailed</th>
+                                        <th class="p-3 text-left border-b">TYPE</th>
+                                        <th class="p-3 text-left border-b">Turnover</th>
+                                        <th class="p-3 text-left border-b">Win/Lose</th>
+                                        <th class="p-3 text-left border-b">Votes</th>
+                                        <th class="p-3 text-left border-b">Lose</th>
+                                        <th class="p-3 text-left border-b">Win</th>
+                                        <th class="p-3 text-left border-b">RC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="p-3 border-b">Dưới</td>
+                                        <td class="p-3 border-b">1H Handicap</td>
+                                        <td class="p-3 border-b">10,430.00</td>
+                                        <td class="p-3 border-b win-value">2,668.00</td>
+                                        <td class="p-3 border-b">31.00</td>
+                                        <td class="p-3 border-b">0.00</td>
+                                        <td class="p-3 border-b">10.00</td>
+                                        <td class="p-3 border-b">10.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

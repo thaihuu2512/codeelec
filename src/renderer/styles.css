@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-100 font-sans antialiased;
+  }
+
+  th {
+    @apply bg-gray-50 font-semibold text-sm uppercase p-3 sticky top-0 z-10 transition-colors duration-200 cursor-pointer hover:bg-gray-100;
+  }
+
+  td {
+    @apply p-3 transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded transition-all duration-200 hover:-translate-y-0.5 hover:shadow-custom-hover;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-blue-600;
+  }
+
+  .btn-secondary {
+    @apply btn bg-gray-200 hover:bg-gray-300;
+  }
+
+  .table-container {
+    @apply overflow-x-auto rounded-lg shadow-custom bg-white;
+  }
+
+  .data-table {
+    @apply min-w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply border-b border-gray-200;
+  }
+
+  .data-table td {
+    @apply border-b border-gray-100;
+  }
+
+  .data-table tbody tr:hover td {
+    @apply bg-blue-50;
+  }
+
+  .checkbox-container {
+    @apply flex items-center space-x-2;
+  }
+
+  .form-checkbox {
+    @apply w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer;
+  }
+
+  .form-input {
+    @apply px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200;
+  }
+
+  .search-container {
+    @apply relative;
+  }
+
+  .search-input {
+    @apply pl-3 pr-10 py-2 w-full border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary;
+  }
+
+  .tab-button {
+    @apply btn-secondary;
+  }
+
+  .tab-button.active {
+    @apply bg-primary text-white hover:bg-blue-600;
+  }
+}
+
+@layer utilities {
+  .win-value {
+    @apply text-success font-medium;
+  }
+
+  .lose-value {
+    @apply text-danger font-medium;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded hover:bg-gray-500;
+}
