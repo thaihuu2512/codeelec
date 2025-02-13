@@ -1,3 +1,13 @@
+// Menu data structure
+const menuData = [
+    { id: 'member-ibc', text: 'Member IBC', icon: 'fas fa-users', active: true },
+    { id: 'member-sbo', text: 'Member SBO', icon: 'fas fa-users' },
+    { id: 'agent-sbo', text: 'Agent SBO', icon: 'fas fa-user-tie' },
+    { id: 'agent-ibc', text: 'Agent IBC', icon: 'fas fa-user-tie' },
+    { id: 'agent-p88', text: 'Agent P88', icon: 'fas fa-user-tie' },
+    { id: 'agent-betisn', text: 'Agent BetISN', icon: 'fas fa-user-tie' }
+];
+
 // Sample data for tables
 const sampleData = {
     leftTable: [
@@ -12,7 +22,99 @@ const sampleData = {
     ]
 };
 
-// Enhanced TableManager class with animations and interactions
+// Function to render menu
+function renderMenu() {
+    const menuContainer = document.querySelector('.bg-gray-800 ul');
+    if (!menuContainer) return;
+
+    menuContainer.innerHTML = menuData.map((item, index) => `
+        <li class="menu-item" data-id="${item.id}">
+            <a href="#" class="block p-2 ${item.active ? 'bg-gray-700' : ''} rounded hover:bg-gray-600 transition-all duration-300 flex items-center space-x-2">
+                <i class="${item.icon}"></i>
+                <span>${item.text}</span>
+            </a>
+        </li>
+    `).join('');
+
+    // Add click handlers to menu items
+    const menuItems = menuContainer.querySelectorAll('.menu-item');
+    menuItems.forEach((item, index) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Update active state in data
+            menuData.forEach(menuItem => menuItem.active = false);
+            menuData[index].active = true;
+
+            // Update UI
+            menuItems.forEach(mi => {
+                const link = mi.querySelector('a');
+                link.classList.remove('bg-gray-700');
+                link.classList.add('hover:bg-gray-700');
+            });
+            
+            const clickedLink = item.querySelector('a');
+            clickedLink.classList.add('bg-gray-700');
+            clickedLink.classList.remove('hover:bg-gray-700');
+
+            // Add slide animation
+            item.style.transform = 'translateX(5px)';
+            setTimeout(() => {
+                item.style.transform = 'translateX(0)';
+            }, 200);
+
+            // Update content based on selection
+            updateContent(menuData[index]);
+        });
+
+        // Add hover animation
+        item.addEventListener('mouseenter', () => {
+            if (!menuData[index].active) {
+                item.style.transform = 'translateX(5px)';
+            }
+        });
+
+        item.addEventListener('mouseleave', () => {
+            if (!menuData[index].active) {
+                item.style.transform = 'translateX(0)';
+            }
+        });
+    });
+}
+
+// Function to update main content
+function updateContent(menuItem) {
+    console.log(`Loading content for: ${menuItem.text}`);
+    
+    // Show loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'loading-indicator fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg';
+    loadingDiv.textContent = `Loading ${menuItem.text} data...`;
+    document.body.appendChild(loadingDiv);
+
+    // Simulate content update
+    setTimeout(() => {
+        // Update tables with new data
+        updateTableData();
+        
+        // Remove loading indicator
+        loadingDiv.style.opacity = '0';
+        setTimeout(() => loadingDiv.remove(), 300);
+
+        // Show success notification
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg';
+        notification.textContent = `${menuItem.text} data loaded successfully`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }, 500);
+}
+
+// Enhanced TableManager class
 class TableManager {
     constructor(tableId, data) {
         this.table = document.getElementById(tableId);
@@ -30,18 +132,18 @@ class TableManager {
         
         this.data.forEach(row => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-gray-50';
+            tr.className = 'hover:bg-gray-50 transition-all duration-300';
             
             Object.values(row).forEach(value => {
                 const td = document.createElement('td');
-                td.className = 'p-3 border-b';
+                td.className = 'p-3 border-b transition-all duration-300';
                 td.textContent = typeof value === 'number' ? 
                     value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : 
                     value;
                 
-                // Add color to win/lose values
                 if (typeof value === 'number' && td.textContent.includes('.')) {
                     td.style.color = value >= 0 ? '#10B981' : '#EF4444';
+                    td.style.fontWeight = 'bold';
                 }
                 
                 tr.appendChild(td);
@@ -112,10 +214,7 @@ class TableManager {
     }
 
     sortTable(column) {
-        const tbody = this.table.querySelector('tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
         const headers = this.table.querySelectorAll('th');
-
         this.sortDirection[column] = !this.sortDirection[column];
 
         headers.forEach(header => {
@@ -146,16 +245,71 @@ class TableManager {
         this.setupAnimations();
     }
 
-    // Method to update data
     updateData(newData) {
-        this.data = newData;
-        this.renderData();
-        this.setupRowHighlight();
-        this.setupAnimations();
+        const tbody = this.table.querySelector('tbody');
+        const rows = tbody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.transition = 'all 0.3s ease';
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(-10px)';
+        });
+
+        setTimeout(() => {
+            this.data = newData;
+            this.renderData();
+            this.setupRowHighlight();
+            this.setupAnimations();
+        }, 300);
     }
 }
 
-// Enhanced tab switching with animations
+// Function to generate random data
+function generateRandomData() {
+    const types = ['1H', 'FT'];
+    const hdps = ['0.25', '0.50', '0.75', '1.00'];
+    const detaileds = ['Trên', 'Dưới'];
+
+    const randomAmount = () => Math.floor(Math.random() * 15000) + 5000;
+    const randomWinLose = () => (Math.random() * 8000 - 4000).toFixed(2);
+
+    return {
+        leftTable: Array(3).fill(null).map(() => ({
+            type: types[Math.floor(Math.random() * types.length)],
+            hdp: hdps[Math.floor(Math.random() * hdps.length)],
+            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
+            turnover: randomAmount(),
+            winLose: parseFloat(randomWinLose()),
+            votes: Math.floor(Math.random() * 30) + 10,
+            lose: Math.floor(Math.random() * 5),
+            win: Math.floor(Math.random() * 8),
+            rc: Math.floor(Math.random() * 3)
+        })),
+        rightTable: Array(3).fill(null).map(() => ({
+            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
+            type: `${types[Math.floor(Math.random() * types.length)]} Handicap`,
+            turnover: randomAmount(),
+            winLose: parseFloat(randomWinLose()),
+            votes: Math.floor(Math.random() * 40) + 15,
+            lose: Math.floor(Math.random() * 6),
+            win: Math.floor(Math.random() * 8),
+            rc: Math.floor(Math.random() * 4)
+        }))
+    };
+}
+
+// Function to update table data
+function updateTableData() {
+    document.body.style.cursor = 'wait';
+    const newData = generateRandomData();
+    
+    setTimeout(() => {
+        leftTableManager.updateData(newData.leftTable);
+        rightTableManager.updateData(newData.rightTable);
+        document.body.style.cursor = 'default';
+    }, 300);
+}
+
+// Tab switching function
 function switchTab(tabName) {
     const tabs = document.querySelectorAll('.tab-button');
     const activeClass = 'active';
@@ -171,49 +325,10 @@ function switchTab(tabName) {
         }
     });
 
-    // Simulate data update when switching tabs
     updateTableData();
 }
 
-// Function to generate random data
-function generateRandomData() {
-    const types = ['1H', 'FT'];
-    const hdps = ['0.25', '0.50', '0.75', '1.00'];
-    const detaileds = ['Trên', 'Dưới'];
-
-    return {
-        leftTable: Array(3).fill(null).map(() => ({
-            type: types[Math.floor(Math.random() * types.length)],
-            hdp: hdps[Math.floor(Math.random() * hdps.length)],
-            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
-            turnover: Math.floor(Math.random() * 10000),
-            winLose: (Math.random() * 4000 - 2000),
-            votes: Math.floor(Math.random() * 30),
-            lose: Math.floor(Math.random() * 5),
-            win: Math.floor(Math.random() * 5),
-            rc: Math.floor(Math.random() * 3)
-        })),
-        rightTable: Array(3).fill(null).map(() => ({
-            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
-            type: `${types[Math.floor(Math.random() * types.length)]} Handicap`,
-            turnover: Math.floor(Math.random() * 15000),
-            winLose: (Math.random() * 5000 - 2500),
-            votes: Math.floor(Math.random() * 40),
-            lose: Math.floor(Math.random() * 6),
-            win: Math.floor(Math.random() * 8),
-            rc: Math.floor(Math.random() * 4)
-        }))
-    };
-}
-
-// Function to update table data
-function updateTableData() {
-    const newData = generateRandomData();
-    leftTableManager.updateData(newData.leftTable);
-    rightTableManager.updateData(newData.rightTable);
-}
-
-// Enhanced search functionality with highlighting
+// Search functionality
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
@@ -224,7 +339,6 @@ function setupSearch() {
         
         tables.forEach(table => {
             const rows = table.querySelectorAll('tbody tr');
-            
             rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
                 const match = text.includes(searchTerm);
@@ -266,62 +380,21 @@ function setupSearch() {
     }
 }
 
-// Enhanced checkbox interactions
-function setupCheckboxes() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            // Update data when checkboxes change
-            updateTableData();
-        });
-
-        const label = checkbox.closest('label');
-        if (label) {
-            label.addEventListener('mouseenter', () => {
-                label.style.transform = 'translateX(5px)';
-                label.style.transition = 'all 0.2s ease';
-            });
-            label.addEventListener('mouseleave', () => {
-                label.style.transform = 'translateX(0)';
-            });
-        }
-    });
-}
-
-// Setup date range functionality
-function setupDateRange() {
-    const fromDate = document.getElementById('from');
-    const toDate = document.getElementById('to');
-    const dateButtons = document.querySelectorAll('button');
-
-    // Update data when date range changes
-    fromDate.addEventListener('change', updateTableData);
-    toDate.addEventListener('change', updateTableData);
-
-    // Add click handlers for date shortcut buttons
-    dateButtons.forEach(button => {
-        if (button.textContent.includes('Hôm')) {
-            button.addEventListener('click', () => {
-                updateTableData();
-            });
-        }
-    });
-}
-
 let leftTableManager, rightTableManager;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize table managers with sample data
+    // Initialize menu
+    renderMenu();
+    
+    // Initialize table managers
     leftTableManager = new TableManager('leftTable', sampleData.leftTable);
     rightTableManager = new TableManager('rightTable', sampleData.rightTable);
 
     // Setup other functionalities
     setupSearch();
-    setupCheckboxes();
-    setupDateRange();
 
-    // Set first tab as active with animation
+    // Set first tab as active
     const firstTab = document.querySelector('.tab-button');
     if (firstTab) {
         firstTab.classList.add('active');
@@ -339,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize date inputs with current date
+    // Initialize date inputs
     const today = new Date().toISOString().split('T')[0];
     document.querySelector('#from').value = today;
     document.querySelector('#to').value = today;
