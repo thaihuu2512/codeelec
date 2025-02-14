@@ -8,19 +8,78 @@ const menuData = [
     { id: 'agent-betisn', text: 'Agent BetISN', icon: 'fas fa-user-tie' }
 ];
 
-// Sample data for tables
-const sampleData = {
-    leftTable: [
-        { type: '1H', hdp: '0.25', detailed: 'Dưới', turnover: 7210, winLose: 1825.00, votes: 23, lose: 0, win: 3, rc: 0 },
-        { type: 'FT', hdp: '0.50', detailed: 'Trên', turnover: 5430, winLose: -925.00, votes: 15, lose: 2, win: 1, rc: 1 },
-        { type: '1H', hdp: '0.75', detailed: 'Trên', turnover: 3890, winLose: 650.00, votes: 18, lose: 1, win: 4, rc: 0 }
-    ],
-    rightTable: [
-        { detailed: 'Dưới', type: '1H Handicap', turnover: 10430.00, winLose: 2668.00, votes: 31.00, lose: 0.00, win: 10.00, rc: 10.00 },
-        { detailed: 'Trên', type: 'FT Handicap', turnover: 8250.00, winLose: -1520.00, votes: 25.00, lose: 5.00, win: 3.00, rc: 2.00 },
-        { detailed: 'Trên', type: '1H Handicap', turnover: 6780.00, winLose: 890.00, votes: 20.00, lose: 2.00, win: 6.00, rc: 1.00 }
-    ]
-};
+// Sample data for combined table
+const sampleData = [
+    { type: '1H', hdp: '0.25', detailed: 'Dưới', turnover: 7210, winLose: 1825.00, votes: 23, lose: 0, win: 3, rc: 0 },
+    { type: 'FT', hdp: '0.50', detailed: 'Trên', turnover: 5430, winLose: -925.00, votes: 15, lose: 2, win: 1, rc: 1 },
+    { type: '1H', hdp: '0.75', detailed: 'Trên', turnover: 3890, winLose: 650.00, votes: 18, lose: 1, win: 4, rc: 0 },
+    { type: '1H Handicap', hdp: '-', detailed: 'Dưới', turnover: 10430.00, winLose: 2668.00, votes: 31.00, lose: 0.00, win: 10.00, rc: 10.00 },
+    { type: 'FT Handicap', hdp: '-', detailed: 'Trên', turnover: 8250.00, winLose: -1520.00, votes: 25.00, lose: 5.00, win: 3.00, rc: 2.00 },
+    { type: '1H Handicap', hdp: '-', detailed: 'Trên', turnover: 6780.00, winLose: 890.00, votes: 20.00, lose: 2.00, win: 6.00, rc: 1.00 }
+];
+
+// Auto-reload timer
+let autoReloadTimer = null;
+
+// Function to handle auto-reload
+function setupAutoReload() {
+    const autoReloadSelect = document.getElementById('autoReload');
+    if (!autoReloadSelect) return;
+
+    autoReloadSelect.addEventListener('change', () => {
+        // Clear existing timer
+        if (autoReloadTimer) {
+            clearInterval(autoReloadTimer);
+            autoReloadTimer = null;
+        }
+
+        const minutes = parseInt(autoReloadSelect.value);
+        if (minutes) {
+            // Show notification for auto-reload setting
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+            notification.textContent = `Auto-reload set to ${minutes} minutes`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+
+            // Set new timer
+            autoReloadTimer = setInterval(() => {
+                console.log('Auto-reloading data...');
+                // Show notification for each reload
+                const reloadNotification = document.createElement('div');
+                reloadNotification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-lg z-50';
+                reloadNotification.textContent = `Auto-reloading data...`;
+                document.body.appendChild(reloadNotification);
+                
+                setTimeout(() => {
+                    reloadNotification.style.opacity = '0';
+                    reloadNotification.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => reloadNotification.remove(), 300);
+                }, 2000);
+
+                alert('Hello'); // Simple alert for demo
+                updateTableData();
+            }, minutes * 60 * 1000); // Convert minutes to milliseconds
+        } else {
+            // Show notification for auto-reload off
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-yellow-500 text-white px-4 py-2 rounded shadow-lg z-50';
+            notification.textContent = 'Auto-reload turned off';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+    });
+}
 
 // Function to render menu
 function renderMenu() {
@@ -272,29 +331,31 @@ function generateRandomData() {
     const randomAmount = () => Math.floor(Math.random() * 15000) + 5000;
     const randomWinLose = () => (Math.random() * 8000 - 4000).toFixed(2);
 
-    return {
-        leftTable: Array(3).fill(null).map(() => ({
-            type: types[Math.floor(Math.random() * types.length)],
-            hdp: hdps[Math.floor(Math.random() * hdps.length)],
-            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
-            turnover: randomAmount(),
-            winLose: parseFloat(randomWinLose()),
-            votes: Math.floor(Math.random() * 30) + 10,
-            lose: Math.floor(Math.random() * 5),
-            win: Math.floor(Math.random() * 8),
-            rc: Math.floor(Math.random() * 3)
-        })),
-        rightTable: Array(3).fill(null).map(() => ({
-            detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
-            type: `${types[Math.floor(Math.random() * types.length)]} Handicap`,
-            turnover: randomAmount(),
-            winLose: parseFloat(randomWinLose()),
-            votes: Math.floor(Math.random() * 40) + 15,
-            lose: Math.floor(Math.random() * 6),
-            win: Math.floor(Math.random() * 8),
-            rc: Math.floor(Math.random() * 4)
-        }))
-    };
+    const regularEntries = Array(3).fill(null).map(() => ({
+        type: types[Math.floor(Math.random() * types.length)],
+        hdp: hdps[Math.floor(Math.random() * hdps.length)],
+        detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
+        turnover: randomAmount(),
+        winLose: parseFloat(randomWinLose()),
+        votes: Math.floor(Math.random() * 30) + 10,
+        lose: Math.floor(Math.random() * 5),
+        win: Math.floor(Math.random() * 8),
+        rc: Math.floor(Math.random() * 3)
+    }));
+
+    const handicapEntries = Array(3).fill(null).map(() => ({
+        type: `${types[Math.floor(Math.random() * types.length)]} Handicap`,
+        hdp: '-',
+        detailed: detaileds[Math.floor(Math.random() * detaileds.length)],
+        turnover: randomAmount(),
+        winLose: parseFloat(randomWinLose()),
+        votes: Math.floor(Math.random() * 40) + 15,
+        lose: Math.floor(Math.random() * 6),
+        win: Math.floor(Math.random() * 8),
+        rc: Math.floor(Math.random() * 4)
+    }));
+
+    return [...regularEntries, ...handicapEntries];
 }
 
 // Function to update table data
@@ -303,8 +364,7 @@ function updateTableData() {
     const newData = generateRandomData();
     
     setTimeout(() => {
-        leftTableManager.updateData(newData.leftTable);
-        rightTableManager.updateData(newData.rightTable);
+        tableManager.updateData(newData);
         document.body.style.cursor = 'default';
     }, 300);
 }
@@ -380,19 +440,19 @@ function setupSearch() {
     }
 }
 
-let leftTableManager, rightTableManager;
+let tableManager;
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize menu
     renderMenu();
     
-    // Initialize table managers
-    leftTableManager = new TableManager('leftTable', sampleData.leftTable);
-    rightTableManager = new TableManager('rightTable', sampleData.rightTable);
+    // Initialize table manager
+    tableManager = new TableManager('combinedTable', sampleData);
 
     // Setup other functionalities
     setupSearch();
+    setupAutoReload();
 
     // Set first tab as active
     const firstTab = document.querySelector('.tab-button');

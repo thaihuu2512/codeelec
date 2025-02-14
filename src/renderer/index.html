@@ -118,69 +118,37 @@
                         </div>
                     </div>
 
-                    <!-- Data Tables -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <!-- Left Table -->
-                        <div class="table-container overflow-x-auto rounded-lg bg-white">
-                            <table id="leftTable" class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="p-3 text-left border-b">TYPE</th>
-                                        <th class="p-3 text-left border-b">HDP</th>
-                                        <th class="p-3 text-left border-b">Detailed</th>
-                                        <th class="p-3 text-left border-b">Turnover</th>
-                                        <th class="p-3 text-left border-b">Win/Lose</th>
-                                        <th class="p-3 text-left border-b">Votes</th>
-                                        <th class="p-3 text-left border-b">Lose</th>
-                                        <th class="p-3 text-left border-b">Win</th>
-                                        <th class="p-3 text-left border-b">RC</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="p-3 border-b">1H</td>
-                                        <td class="p-3 border-b">0.25</td>
-                                        <td class="p-3 border-b">Dưới</td>
-                                        <td class="p-3 border-b">7210</td>
-                                        <td class="p-3 border-b win-value">1,825.00</td>
-                                        <td class="p-3 border-b">23</td>
-                                        <td class="p-3 border-b">0</td>
-                                        <td class="p-3 border-b">3</td>
-                                        <td class="p-3 border-b">0</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <!-- Auto Reload -->
+                    <div class="mb-4 flex items-center gap-2">
+                        <label for="autoReload" class="font-medium">Auto Reload:</label>
+                        <select id="autoReload" class="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Off</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60">1 hour</option>
+                            <option value="120">2 hours</option>
+                        </select>
+                    </div>
 
-                        <!-- Right Table -->
-                        <div class="table-container overflow-x-auto rounded-lg bg-white">
-                            <table id="rightTable" class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-50">
-                                        <th class="p-3 text-left border-b">Detailed</th>
-                                        <th class="p-3 text-left border-b">TYPE</th>
-                                        <th class="p-3 text-left border-b">Turnover</th>
-                                        <th class="p-3 text-left border-b">Win/Lose</th>
-                                        <th class="p-3 text-left border-b">Votes</th>
-                                        <th class="p-3 text-left border-b">Lose</th>
-                                        <th class="p-3 text-left border-b">Win</th>
-                                        <th class="p-3 text-left border-b">RC</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="p-3 border-b">Dưới</td>
-                                        <td class="p-3 border-b">1H Handicap</td>
-                                        <td class="p-3 border-b">10,430.00</td>
-                                        <td class="p-3 border-b win-value">2,668.00</td>
-                                        <td class="p-3 border-b">31.00</td>
-                                        <td class="p-3 border-b">0.00</td>
-                                        <td class="p-3 border-b">10.00</td>
-                                        <td class="p-3 border-b">10.00</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <!-- Combined Data Table -->
+                    <div class="overflow-x-auto rounded-lg bg-white">
+                        <table id="combinedTable" class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="p-3 text-left border-b">TYPE</th>
+                                    <th class="p-3 text-left border-b">HDP</th>
+                                    <th class="p-3 text-left border-b">Detailed</th>
+                                    <th class="p-3 text-left border-b">Turnover</th>
+                                    <th class="p-3 text-left border-b">Win/Lose</th>
+                                    <th class="p-3 text-left border-b">Votes</th>
+                                    <th class="p-3 text-left border-b">Lose</th>
+                                    <th class="p-3 text-left border-b">Win</th>
+                                    <th class="p-3 text-left border-b">RC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
